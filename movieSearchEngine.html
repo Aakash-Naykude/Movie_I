@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search Engine</title>
+    <style>
+        #cont2{
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        Welcome to Movie website
+    </h1>
+    <div id="cont1" style="margin: auto;">
+        <input type="text" id="search" placeholder="Search For Movie"/>
+        <button onclick="startSearch()">Search</button>
+    </div>
+    <div id="cont2">
+
+    </div>
+</body>
+</html>
+<script>
+    let cont = document.getElementById('cont2')
+    async function startSearch(){
+        let get = document.getElementById("search").value;
+        let res = await fetch(`http://www.omdbapi.com/?apikey=18e8b787&t=${get}&i`)
+        let data = await res.json()
+        console.log(data)
+        start(data)
+    }
+    
+    function start(data){
+            let div = document.createElement('div')
+            div.style.marginTop = "20px"
+            let img = document.createElement('img')
+            img.src = data.Poster;
+            img.style.borderRadius = "10px"
+            let box = document.createElement('p')
+            box.innerText = data.BoxOffice;
+            let release = document.createElement('p')
+            release.innerText = data.Released;
+            let lan = document.createElement('p')
+            lan.innerText = data.Language;
+            let gerne = document.createElement('p');
+            gerne.innerText = data.Genre;
+            let rating = document.createElement("P")
+            rating.innerText = data.imdbRating;
+            div.append(img, box, release, gerne, rating)
+            cont.append(div)
+    }
+</script>
