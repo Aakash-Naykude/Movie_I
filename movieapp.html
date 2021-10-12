@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies App III</title>
+</head>
+<body>
+    <h1 style="text-align: center;">TMDB Popular Movies</h1>
+    <div id="cont"></div>
+</body>
+</html>
+<script>
+    let cont = document.getElementById('cont')
+    cont.style.display = "grid"
+    cont.style.gridTemplateColumns = "auto auto auto"
+   //cont.style.gap = "10%"
+    cont.style.margin = "3%"
+    async function show(){
+        try{
+            let res = await fetch("https://api.themoviedb.org/3/trending/movie/day?api_key=4cf94a7571c0742fecde95c6c48dc95c")
+            let data = await res.json()
+            start(data.results)
+            console.log(data.results)
+        }
+        catch (e){
+            console.log(e)
+        }
+    }
+    show()
+    //4cf94a7571c0742fecde95c6c48dc95c
+    //https://api.themoviedb.org/3/movie/550?api_key=4cf94a7571c0742fecde95c6c48dc95c
+    function start(data){
+        
+        //cont.innerHTML = null;
+        data.forEach(function(data){
+            let div = document.createElement('div')
+            div.style.marginTop = "20px"
+            let img = document.createElement('img')
+            img.src = `https://image.tmdb.org/t/p/w500/${data.poster_path}`;
+            img.style.borderRadius = "10px"
+            img.style.width = "300px"
+            img.style.height = "400px"
+            let name = document.createElement('p')
+            name.innerText = data.title;
+            //console.log(data.title)
+            let release = document.createElement('p')
+            release.innerText = data.release_date;
+            let lan = document.createElement('p')
+            lan.innerText = data.original_language;
+            let gerne = document.createElement('p');
+            gerne.innerText = data.media_type;
+            let rating = document.createElement("P")
+            rating.innerText = data.vote_average;
+            //console.log(rating.innerHTML)
+            div.append(img, name, release, rating, gerne, lan)
+            cont.append(div)
+        })
+    }
+</script>
