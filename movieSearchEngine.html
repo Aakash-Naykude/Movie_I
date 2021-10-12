@@ -35,11 +35,14 @@
     }
     
     function start(data){
+        cont.innerHTML = null;
             let div = document.createElement('div')
             div.style.marginTop = "20px"
             let img = document.createElement('img')
             img.src = data.Poster;
             img.style.borderRadius = "10px"
+            let name = document.createElement('p')
+            name.innerText = data.Title;
             let box = document.createElement('p')
             box.innerText = data.BoxOffice;
             let release = document.createElement('p')
@@ -50,7 +53,18 @@
             gerne.innerText = data.Genre;
             let rating = document.createElement("P")
             rating.innerText = data.imdbRating;
-            div.append(img, box, release, gerne, rating)
-            cont.append(div)
+            console.log(rating.innerHTML)
+            if(rating.innerHTML > 8){
+                let btn = document.createElement('button')
+                btn.innerText = "Recommended";
+                btn.style.marginTop = "20px"
+                btn.style.background = "green"
+                div.append(img, name, box, release, gerne, rating)
+                cont.append(btn, div)
+            } else {
+                div.append(img, name, box, release, gerne, rating)
+                cont.append(div)
+            }
+            
     }
 </script>
