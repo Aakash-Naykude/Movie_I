@@ -22,6 +22,7 @@
         <input oninput="debounce(main, 1000)" type="text" id="movie" placeholder="Enter movie name" />
     
         <div id="movies"></div>
+        <div id="cont2"></div>
         <div id="cont"></div>
       </body>
 </html>
@@ -45,16 +46,62 @@
     }
     function append(movies){
         m.innerHTML = null;
+        cont.innerHTML = null;
         if(movies === undefined){
             return false;
         }
         movies.forEach(function(data){
             let p = document.createElement('p')
             p.innerText = data.Title;
+            p.onclick = function(){
+                showinfo(data.imdbID)
+            }
             m.append(p)
         })
+        movies.forEach(function(data){
+            let div = document.createElement('div')
+            let img = document.createElement('img')
+            img.src = data.Poster;
+            let name = document.createElement('p')
+            name.innerText = data.Title;
+            let release = document.createElement('p')
+            release.innerText = data.Year;
+            let imdb = document.createElement('p')
+            imdb.innerText = data.imdbID;
+            let btn = document.createElement('button');
+            btn.innerText = "Show more info"
+            //console.log(imdb)
+            btn.onclick = function(){
+                showinfo(imdb.innerHTML)
+                //passdata(imdb.innerHTML)
+            }
+            div.append(img, name, release, imdb, btn)
+            cont.append(div)
+        })
     }
-
+    let cont2 = document.getElementById('cont2')
+    async function showinfo(data){
+        console.log(data)
+        let res = await fetch(`http://www.omdbapi.com/?apikey=18e8b787&i=${data}`)
+        let d = await res.json()
+        console.log(d)
+        let img = document.createElement('img')
+            img.src = d.Poster;
+            img.style.borderRadius = "10px"
+            let name = document.createElement('p')
+            name.innerText = d.Title;
+            let box = document.createElement('p')
+            box.innerText = d.BoxOffice;
+            let release = document.createElement('p')
+            release.innerText = d.Released;
+            let lan = document.createElement('p')
+            lan.innerText = d.Language;
+            let gerne = document.createElement('p');
+            gerne.innerText = d.Genre;
+            let rating = document.createElement("P")
+            rating.innerText = d.imdbRating;
+            cont2.append(img, name, box, lan, gerne, rating)
+    }
     async function main(){
         let name = document.getElementById('movie').value;
         if(name.length<3){
@@ -62,7 +109,7 @@
         }
         let res = await start(name)
         append(res.Search)
-        console.log(res)
+        //console.log(res)
     }
     function debounce(main, time){
         if(sets){
